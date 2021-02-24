@@ -64,3 +64,9 @@ node_modules/
 
 # dotenv environment variables file
 .env
+
+service-account-file.json
+
+/build
+
+yarn.lock
