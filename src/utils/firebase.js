@@ -1,7 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-import serviceAccount from "../../service-account-file.json"
+import serviceAccount from "../service-account-file.json"
 
 firebase.initializeApp(serviceAccount);
 

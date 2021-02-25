@@ -15,7 +15,11 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, {useRef} from "react";
+
+import firebase, { auth } from "../../utils/firebase";
+
+import { useAuth } from "../../hooks/auth";
 
 // reactstrap components
 import {
@@ -34,6 +38,41 @@ import {
 } from "reactstrap";
 
 const Login = () => {
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+  const { signIn } = useAuth();
+
+  const HandleLogin = (UserCredential) => {
+    signIn(UserCredential);
+  };
+
+  const HandleAuthError = (error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log(errorCode, errorMessage);
+  };
+
+  const HandleOnClickLoginGoogle = (e) => {
+    e.preventDefault();
+
+    const provider = new firebase.auth.GoogleAuthProvider();
+
+    auth
+      .signInWithPopup(provider)
+      .then(HandleLogin)
+      .catch(HandleAuthError);
+  };
+  
+  const HandleSubmit = (e) => {
+    e.preventDefault();
+  
+    if (emailRef.current && passwordRef.current) {
+      auth.createUserWithEmailAndPassword(emailRef.current.value, passwordRef.current.value)
+        .then(HandleLogin)
+        .catch(HandleAuthError);
+    }
+  };
+
   return (
     <>
       <Col lg="5" md="7">
@@ -47,24 +86,7 @@ const Login = () => {
                 className="btn-neutral btn-icon"
                 color="default"
                 href="#pablo"
-                onClick={(e) => e.preventDefault()}
-              >
-                <span className="btn-inner--icon">
-                  <img
-                    alt="..."
-                    src={
-                      require("../../assets/img/icons/common/github.svg")
-                        .default
-                    }
-                  />
-                </span>
-                <span className="btn-inner--text">Github</span>
-              </Button>
-              <Button
-                className="btn-neutral btn-icon"
-                color="default"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
+                onClick={HandleOnClickLoginGoogle}
               >
                 <span className="btn-inner--icon">
                   <img
@@ -83,7 +105,7 @@ const Login = () => {
             <div className="text-center text-muted mb-4">
               <small>Ou logue com suas credenciais</small>
             </div>
-            <Form role="form">
+            <Form role="form" onSubmit={HandleSubmit}>
               <FormGroup className="mb-3">
                 <InputGroup className="input-group-alternative">
                   <InputGroupAddon addonType="prepend">
@@ -95,6 +117,7 @@ const Login = () => {
                     placeholder="Email"
                     type="email"
                     autoComplete="new-email"
+                    ref={emailRef}
                   />
                 </InputGroup>
               </FormGroup>
@@ -109,6 +132,7 @@ const Login = () => {
                     placeholder="Senha"
                     type="password"
                     autoComplete="new-password"
+                    ref={passwordRef}
                   />
                 </InputGroup>
               </FormGroup>
@@ -126,7 +150,7 @@ const Login = () => {
                 </label>
               </div>
               <div className="text-center">
-                <Button className="my-4" color="primary" type="button">
+                <Button className="my-4" color="primary" type="submit">
                   Logar
                 </Button>
               </div>
