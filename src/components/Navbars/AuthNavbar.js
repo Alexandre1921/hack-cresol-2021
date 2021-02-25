@@ -19,15 +19,15 @@ import React from "react";
 import { Link } from "react-router-dom";
 // reactstrap components
 import {
-  UncontrolledCollapse,
+  // UncontrolledCollapse,
   NavbarBrand,
   Navbar,
-  NavItem,
-  NavLink,
-  Nav,
+  // NavItem,
+  // NavLink,
+  // Nav,
   Container,
-  Row,
-  Col,
+  // Row,
+  // Col,
 } from "reactstrap";
 
 const AdminNavbar = () => {
@@ -43,7 +43,7 @@ const AdminNavbar = () => {
               }
             />
           </NavbarBrand>
-          <button className="navbar-toggler" id="navbar-collapse-main">
+          {/* <button className="navbar-toggler" id="navbar-collapse-main">
             <span className="navbar-toggler-icon" />
           </button>
           <UncontrolledCollapse navbar toggler="#navbar-collapse-main">
@@ -102,7 +102,7 @@ const AdminNavbar = () => {
                 </NavLink>
               </NavItem>
             </Nav>
-          </UncontrolledCollapse>
+          </UncontrolledCollapse> */}
         </Container>
       </Navbar>
     </>

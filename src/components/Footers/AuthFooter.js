@@ -25,7 +25,7 @@ const Login = () => {
   return (
     <>
       <footer className="py-5">
-        <Container>
+        {/* <Container>
           <Row className="align-items-center justify-content-xl-between">
             <Col xl="6">
               <div className="copyright text-center text-xl-left text-muted">
@@ -76,7 +76,7 @@ const Login = () => {
               </Nav>
             </Col>
           </Row>
-        </Container>
+        </Container> */}
       </footer>
     </>
   );
