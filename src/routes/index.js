@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch } from "react-router-dom";
+import { Switch, Redirect } from "react-router-dom";
 
 import Route from './Route';
 
@@ -11,6 +11,7 @@ const Routes = () => {
     <Switch>
       <Route path="/admin" component={(props) =><AdminLayout {...props} />} isPrivate/>
       <Route path="/auth" component={(props) => <AuthLayout {...props} />} />
+      <Route render={() => <Redirect to={{pathname: "/"}} />} />
     </Switch>
   );
 };
