@@ -14,6 +14,5 @@ const salvar_coleta = async (state) =>  {
     console.log(coleta)
     console.log(db)
     db.collection("coleta").add(coleta)
-    
 }
 export default salvar_coleta;
