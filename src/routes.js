@@ -24,6 +24,7 @@ import Tables from "views/examples/Tables.js";
 import Icons from "views/examples/Icons.js";
 import LancarColeta from "views/examples/LancarColeta.js";
 import LancarQualidade from "views/examples/LancarQualidade.js";
+import AnaliseQualidade from "views/examples/AnaliseQualidade.js";
 
 var routes = [
   {
@@ -45,6 +46,13 @@ var routes = [
     name: "Lançar Qualidade",
     icon: "ni ni-active-40 text-primary",
     component: LancarQualidade,
+    layout: "/admin",
+  },
+  {
+    path: "/analise-qualidade",
+    name: "Lançar Qualidade",
+    icon: "ni ni-active-40 text-primary",
+    component: AnaliseQualidade,
     layout: "/admin",
   },
   {

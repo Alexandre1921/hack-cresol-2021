@@ -1,5 +1,4 @@
 import firebase from 'firebase/app';
-import { data } from 'jquery';
 
 const auth = firebase.auth()
 const db = firebase.firestore()
