@@ -70,3 +70,4 @@ service-account-file.json
 /build
 
 yarn.lock
+package-lock.json

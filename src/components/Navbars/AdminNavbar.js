@@ -18,7 +18,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { auth } from "../../utils/firebase";
+// import { auth } from "../../utils/firebase";
 
 import { useAuth } from "../../hooks/auth"
 
@@ -84,7 +84,8 @@ const AdminNavbar = (props) => {
                   </span>
                   <Media className="ml-2 d-none d-lg-block">
                     <span className="mb-0 text-sm font-weight-bold">
-                      {auth.currentUser.displayName}
+                      <text>{/* {auth.currentUser.displayName} */}
+                      </text>
                     </span>
                   </Media>
                 </Media>
