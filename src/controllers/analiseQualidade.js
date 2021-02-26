@@ -2,6 +2,22 @@ import firebase from 'firebase/app';
 
 const auth = firebase.auth()
 const db = firebase.firestore()
+
+var meses=[
+    "Jan",
+    "Fev",
+    "Mar",
+    "Abr",
+    "Mai",
+    "Jun",
+    "Jul",
+    "Ago",
+    "Set",
+    "Out",
+    "Nov",
+    "Dez",
+]
+
 var colors = {
     gray: {
         100: "#f6f9fc",
@@ -27,24 +43,33 @@ var colors = {
     white: "#FFFFFF",
     transparent: "transparent",
 };
+
+function compare(a,b) {
+    return a.data.toDate().getMonth() < b.data.toDate().getMonth();
+  }
+
 export const obter_dados = async () => {
 
     return db.collection("qualidade").where("produtor", "==", "YkI2KWl7bvaghU6cFfII")
         .get()
         .then((querySnapshot) => {
-            const analises = []
+            var analises = []
             const ccs = []
             const mes = []
+            const ccb = []
             querySnapshot.forEach((doc) => {
 
                 const data = doc.data()
                 analises.push(data);
-                ccs.push(data.ccs)
-                const d = new Date(data.data);
-                console.log(data.data.toDate())
-            
-                mes.push(data.data.toDate().getMonth())
+                
             });
+            var analises_ord = analises.sort(compare)
+            analises_ord.forEach((data)=>{
+                ccs.push(data.ccs)
+                ccb.push(data.ccb)
+                mes.push(meses[data.data.toDate().getMonth()])
+            })
+            console.log(analises_ord)
             let qualidadeData = {
                 options: {
                     scales: {
@@ -75,7 +100,7 @@ export const obter_dados = async () => {
                                     content += label;
                                 }
 
-                                content += "$" + yLabel + "k";
+                                content += yLabel;
                                 return content;
                             },
                         },
@@ -94,11 +119,11 @@ export const obter_dados = async () => {
                 },
                 data2: (canvas) => {
                     return {
-                        labels: ["May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                        labels: mes,
                         datasets: [
                             {
-                                label: "Performance",
-                                data: [0, 20, 5, 25, 10, 30, 15, 40, 40],
+                                label: "CCB",
+                                data: ccb,
                             },
                         ],
                     };

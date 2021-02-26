@@ -78,9 +78,9 @@ const AnaliseQualidade = (props) => {
                 <Row className="align-items-center">
                   <div className="col">
                     <h6 className="text-uppercase text-light ls-1 mb-1">
-                      Overview
+                    
                     </h6>
-                    <h2 className="text-white mb-0">Sales value</h2>
+                    <h2 className="text-white mb-0">Análise de qualidade</h2>
                   </div>
                   <div className="col">
                     <Nav className="justify-content-end" pills>
@@ -92,8 +92,8 @@ const AnaliseQualidade = (props) => {
                           href="#pablo"
                           onClick={(e) => toggleNavs(e, 1)}
                         >
-                          <span className="d-none d-md-block">Month</span>
-                          <span className="d-md-none">M</span>
+                          <span className="d-none d-md-block">CCS</span>
+                          <span className="d-md-none">CC</span>
                         </NavLink>
                       </NavItem>
                       <NavItem>
@@ -105,8 +105,8 @@ const AnaliseQualidade = (props) => {
                           href="#pablo"
                           onClick={(e) => toggleNavs(e, 2)}
                         >
-                          <span className="d-none d-md-block">Week</span>
-                          <span className="d-md-none">W</span>
+                          <span className="d-none d-md-block">CCB</span>
+                          <span className="d-md-none">CB</span>
                         </NavLink>
                       </NavItem>
                     </Nav>

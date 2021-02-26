@@ -50,7 +50,7 @@ var routes = [
   },
   {
     path: "/analise-qualidade",
-    name: "Lançar Qualidade",
+    name: "Análise de Qualidade",
     icon: "ni ni-active-40 text-primary",
     component: AnaliseQualidade,
     layout: "/admin",
