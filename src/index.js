@@ -17,12 +17,13 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-import { Switch,BrowserRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 
 import "assets/plugins/nucleo/css/nucleo.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "assets/scss/argon-dashboard-react.scss";
 
+import Routes from './routes/index';
 import Route from './routes/Route';
 import AdminLayout from "layouts/Admin.js";
 import AuthLayout from "layouts/Auth.js";
@@ -32,10 +33,7 @@ import AppProvider from './hooks';
 ReactDOM.render(
   <BrowserRouter>
     <AppProvider>
-      <Switch>
-        <Route path="/admin" component={(props) =><AdminLayout {...props} />} isPrivate/>
-        <Route path="/auth" component={(props) => <AuthLayout {...props} />} />
-      </Switch>
+      <Routes></Routes>
     </AppProvider>
   </BrowserRouter>,
   document.getElementById("root")

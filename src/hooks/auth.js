@@ -9,22 +9,21 @@ const AuthProvider = ({ children }) => {
     const token = localStorage.getItem('@InoveMilk:token');
 
     if (token) {
-      return { token  };
+      return { token };
     }
 
     return {};
   });
 
   const signIn = useCallback(async (UserCredential) => {
-    const credential = UserCredential.credential;
+    const { user } = UserCredential;
 
-    const token = credential.accessToken;
+    const token = user.getIdToken();
 
     localStorage.setItem('@InoveMilk:token', token);
 
     setData({ token });
   }, []);
-  console.log(data);
 
   const signOut = useCallback(() => {
     localStorage.removeItem('@InoveMilk:token');
