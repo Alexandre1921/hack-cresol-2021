@@ -15,7 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, {useRef} from "react";
+import React from "react";
 
 import firebase, { auth } from "../../utils/firebase";
 
@@ -28,8 +28,6 @@ import {
   CardHeader,
   CardBody,
   FormGroup,
-  Form,
-  Input,
   InputGroupAddon,
   InputGroupText,
   InputGroup,
@@ -37,9 +35,11 @@ import {
   Col,
 } from "reactstrap";
 
+import Input from "../../components/Input";
+
+import { FormProvider as Form } from "../../providers/form"
+
 const Login = () => {
-  const emailRef = useRef(null);
-  const passwordRef = useRef(null);
   const { signIn } = useAuth();
 
   const HandleLogin = (UserCredential) => {
@@ -63,14 +63,12 @@ const Login = () => {
       .catch(HandleAuthError);
   };
   
-  const HandleSubmit = (e) => {
-    e.preventDefault();
-  
-    if (emailRef.current && passwordRef.current) {
-      auth.createUserWithEmailAndPassword(emailRef.current.value, passwordRef.current.value)
-        .then(HandleLogin)
-        .catch(HandleAuthError);
-    }
+  const HandleSubmit = ({ data }) => {
+    const { email, password } = data;
+
+    auth.signInWithEmailAndPassword(email, password)
+      .then(HandleLogin)
+      .catch(HandleAuthError);
   };
 
   return (
@@ -114,10 +112,10 @@ const Login = () => {
                     </InputGroupText>
                   </InputGroupAddon>
                   <Input
+                    name="email"
                     placeholder="Email"
                     type="email"
                     autoComplete="new-email"
-                    ref={emailRef}
                   />
                 </InputGroup>
               </FormGroup>
@@ -129,14 +127,14 @@ const Login = () => {
                     </InputGroupText>
                   </InputGroupAddon>
                   <Input
+                    name="password"
                     placeholder="Senha"
                     type="password"
                     autoComplete="new-password"
-                    ref={passwordRef}
                   />
                 </InputGroup>
               </FormGroup>
-              <div className="custom-control custom-control-alternative custom-checkbox">
+              {/* <div className="custom-control custom-control-alternative custom-checkbox">
                 <input
                   className="custom-control-input"
                   id=" customCheckLogin"
@@ -148,7 +146,7 @@ const Login = () => {
                 >
                   <span className="text-muted">Lembrar de mim</span>
                 </label>
-              </div>
+              </div> */}
               <div className="text-center">
                 <Button className="my-4" color="primary" type="submit">
                   Logar
@@ -164,18 +162,18 @@ const Login = () => {
               href="#pablo"
               onClick={(e) => e.preventDefault()}
             >
-              <small>Esqueceu a senha?</small>
+              <small>Crie sua conta</small>
             </a>
           </Col>
-          <Col className="text-right" xs="6">
+          {/* <Col className="text-right" xs="6">
             <a
               className="text-light"
               href="#pablo"
               onClick={(e) => e.preventDefault()}
             >
-              <small>Crie sua conta</small>
+              <small>Esqueceu a senha?</small>
             </a>
-          </Col>
+          </Col> */}
         </Row>
       </Col>
     </>
