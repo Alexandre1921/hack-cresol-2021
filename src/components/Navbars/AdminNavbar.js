@@ -18,7 +18,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-// import { auth } from "../../utils/firebase";
+import { auth } from "../../utils/firebase";
 
 import { useAuth } from "../../hooks/auth"
 
