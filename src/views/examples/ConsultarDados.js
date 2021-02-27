@@ -238,10 +238,7 @@ const Tables = () => {
               type="button"
               onClick={() => toggleModal()}
             >
-              Close
-            </Button>
-            <Button color="primary" type="button">
-              Save changes
+              Fechar
             </Button>
           </div>
         </Modal>
