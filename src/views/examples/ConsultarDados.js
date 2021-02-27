@@ -15,7 +15,11 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, { useState, useEffect } from "react";
+
+import { format } from 'date-fns';
+
+import { ptBR } from 'date-fns/locale'
 
 // reactstrap components
 import {
@@ -39,8 +43,27 @@ import {
 } from "reactstrap";
 // core components
 import Header from "components/Headers/HeaderProdutor.js";
+import { db } from "../../utils/firebase";
+import { useAuth } from "../../hooks/auth";
 
 const Tables = () => {
+  const { uid } = useAuth();
+  const [listQualidade, setListQualidade] = useState([]);
+
+  useEffect(()=>{
+    db.collection("produtor").where("idProdutor","==",uid).get()
+    .then(query=>!query.empty?query.docs[0]:Promise.reject("Produtor não encontrado"))
+    .then(doc=>{
+      if (doc.exists) {
+        db.collection("qualidade").where("produtor","==", doc.id).get()
+        .then(query=>{
+          setListQualidade(query.docs.filter(value=>value.exists).map(value=>({docId: value.id,...value.data()})));
+        })
+      }
+    });
+  }, [uid]);
+  console.log(listQualidade);
+
   return (
     <>
       <Header />
@@ -58,76 +81,60 @@ const Tables = () => {
                   <tr>
                     <th scope="col">Data</th>
                     <th scope="col">Laticínio</th>
-                    <th scope="col">Status</th>
+                    <th scope="col">Observação</th>
                     <th scope="col" />
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th>Quinta-feira - 12/02/2021</th>
-                    <td scope="row">
-                      <Media className="align-items-center">
-                        <a
-                          className="avatar rounded-circle mr-1"
-                          href="#pablo"
-                          onClick={(e) => e.preventDefault()}
-                        >
-                          <img
-                            alt="..."
-                            src={
-                              require("../../assets/img/theme/bootstrap.jpg")
-                                .default
-                            }
-                          />
-                        </a>
-                        <Media>
-                          <span className="mb-0 text-sm">
-                            Lar
-                          </span>
-                        </Media>
-                      </Media>
-                    </td>
-                    <td>
-                      <Badge color="" className="badge-dot mr-4">
-                        <i className="bg-warning" />
-                        Aguardando resultado
-                      </Badge>
-                    </td>
-                    <td className="text-right">
-                      <UncontrolledDropdown>
-                        <DropdownToggle
-                          className="btn-icon-only text-light"
-                          href="#pablo"
-                          role="button"
-                          size="sm"
-                          color=""
-                          onClick={(e) => e.preventDefault()}
-                        >
-                          <i className="fas fa-ellipsis-v" />
-                        </DropdownToggle>
-                        <DropdownMenu className="dropdown-menu-arrow" right>
-                          <DropdownItem
-                            href="#pablo"
-                            onClick={(e) => e.preventDefault()}
-                          >
-                            Lançar resultado laboratorial
-                          </DropdownItem>
-                          <DropdownItem
-                            href="#pablo"
-                            onClick={(e) => e.preventDefault()}
-                          >
-                            Ver mais detalhes da entrega
-                          </DropdownItem>
-                          <DropdownItem
-                            href="#pablo"
-                            onClick={(e) => e.preventDefault()}
-                          >
-                            Deletar entrega
-                          </DropdownItem>
-                        </DropdownMenu>
-                      </UncontrolledDropdown>
-                    </td>
-                  </tr>
+                  {listQualidade.map((value) => {
+                    return (
+                      <tr key={value.docId}>
+                        <th>{format(value.data.toDate(),"cccc - P", {locale: ptBR})}</th>
+                        <td scope="row">
+                          <Media className="align-items-center">
+                            <Media>
+                              <span className="mb-0 text-sm">
+                                {value.nome_empresa}
+                              </span>
+                            </Media>
+                          </Media>
+                        </td>
+                        <td>
+                          <Badge color="" className="badge-dot mr-4">
+                            {value.observacao}
+                          </Badge>
+                        </td>
+                        <td className="text-right">
+                          <UncontrolledDropdown>
+                            <DropdownToggle
+                              className="btn-icon-only text-light"
+                              href="#pablo"
+                              role="button"
+                              size="sm"
+                              color=""
+                              onClick={(e) => e.preventDefault()}
+                            >
+                              <i className="fas fa-ellipsis-v" />
+                            </DropdownToggle>
+                            <DropdownMenu className="dropdown-menu-arrow" right>
+                              <DropdownItem
+                                href="#pablo"
+                                onClick={(e) => e.preventDefault()}
+                              >
+                                Ver mais detalhes do resultado
+                              </DropdownItem>
+                              <DropdownItem
+                                href="#pablo"
+                                onClick={(e) => e.preventDefault()}
+                              >
+                                Deletar entrega
+                              </DropdownItem>
+                            </DropdownMenu>
+                          </UncontrolledDropdown>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </Table>
               <CardFooter className="py-4">
@@ -143,7 +150,7 @@ const Tables = () => {
                         tabIndex="-1"
                       >
                         <i className="fas fa-angle-left" />
-                        <span className="sr-only">Previous</span>
+                        <span className="sr-only">Anterior</span>
                       </PaginationLink>
                     </PaginationItem>
                     <PaginationItem className="active">
@@ -176,7 +183,7 @@ const Tables = () => {
                         onClick={(e) => e.preventDefault()}
                       >
                         <i className="fas fa-angle-right" />
-                        <span className="sr-only">Next</span>
+                        <span className="sr-only">Próximo</span>
                       </PaginationLink>
                     </PaginationItem>
                   </Pagination>

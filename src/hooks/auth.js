@@ -8,9 +8,10 @@ const AuthProvider = ({ children }) => {
   const [data, setData] = useState(() => {
     const token = localStorage.getItem('@InoveMilk:token');
     const role = localStorage.getItem('@InoveMilk:role');
+    const uid = localStorage.getItem('@InoveMilk:uid');
 
     if (token && role) {
-      return { token, role };
+      return { token, role, uid };
     }
 
     return {};
@@ -29,8 +30,9 @@ const AuthProvider = ({ children }) => {
         const { tpUsuario } = doc.data();
         localStorage.setItem('@InoveMilk:token', token);
         localStorage.setItem('@InoveMilk:role', tpUsuario);
+        localStorage.setItem('@InoveMilk:uid', uid);
 
-        setData({ token, role: tpUsuario });
+        setData({ token, role: tpUsuario, uid });
       }
     });
   }, []);
@@ -38,6 +40,7 @@ const AuthProvider = ({ children }) => {
   const signOut = useCallback(() => {
     localStorage.removeItem('@InoveMilk:token');
     localStorage.removeItem('@InoveMilk:role');
+    localStorage.removeItem('@InoveMilk:uid');
 
     auth.signOut();
 
@@ -46,7 +49,7 @@ const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ token: data.token, role: data.role, signIn, signOut }}
+      value={{ token: data.token, role: data.role, uid:data.uid, signIn, signOut }}
     >
       {children}
     </AuthContext.Provider>
