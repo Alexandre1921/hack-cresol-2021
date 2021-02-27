@@ -101,8 +101,8 @@ const Tables = () => {
                           <>
                             <p>Empresa que realizou o teste: <b>{value.nome_empresa}</b></p>
                             <p>Disponibilizou os seguintes resultados:</p>
-                            <p>ccb: <b>{value.ccb}</b></p>
-                            <p>ccs: <b>{value.ccs}</b></p>
+                            <p>CPP: <b>{value.ccb}</b></p>
+                            <p>CCS: <b>{value.ccs}</b></p>
                             <p>ureia: <b>{value.ureia}</b></p>
                             <p>Com as seguintes observacoes:</p>
                             <p><b>{value.observacao || "Nenhuma observação foi feita"}</b></p>
