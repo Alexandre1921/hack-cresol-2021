@@ -15,7 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, {useState, useEffect, useCallback} from "react";
 import NumberFormat from 'react-number-format';
 import ReactLoading from 'react-loading';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -36,27 +36,18 @@ import {
   Modal
 } from "reactstrap";
 // core components
+import Header from "components/Headers/HeaderConsultaConsumidor.js";
 
-class ConsultaConsumidor extends React.Component {
+const ConsultaConsumidor = ({match}) => {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      produtores: [],
-      coletas: [],
-      cargas: [],
-      mdcss: 0,
-      mdctb: 0,
-      mdureia: 0,
-    };
-    this.columns = this.columns = [
-      { field: 'nome', headerName: 'Produtor', width: 300 },
-    ]
-    this.get_data = this.get_data.bind(this)
-  }
+  const columns =  [
+    { field: 'nome', headerName: 'Produtor', width: 300 },
+  ];
 
-  get_data() {
-    get_carga(this.props.match.params.lote).then(val => {
+  const [state,setState] = useState({});
+
+  const get_data = useCallback(() => {
+    get_carga(match.params.lote).then(val => {
       let colet = []
       let prod = []
       val.forEach((carga) => {
@@ -64,8 +55,8 @@ class ConsultaConsumidor extends React.Component {
           col_val.forEach((t) => {
             colet.push(t)
           })
-          col_val.forEach((col) => {
-            get_produtor(col).then((prod_val) => {
+          return Promise.all(col_val.map((col) => {
+            return get_produtor(col).then((prod_val) => {
               prod_val.forEach((t) => {
                 let add = true
                 prod.forEach(s => {
@@ -78,87 +69,27 @@ class ConsultaConsumidor extends React.Component {
                 }
               })
             })
+          }))
+        }).then(()=>{
+          setState({
+            cargas: val,
+            coletas: colet,
+            produtores: prod,
           })
         })
-
       })
-      this.setState({
-        cargas: val,
-        coletas: colet,
-        produtores: prod,
-      })
-      console.log(this.state)
     })
+  },[match.params.lote])
 
+  useEffect(()=>{
+    get_data();
+  },[get_data]);
 
-  }
-
-
-  render() {
     return (
       <>
+        <Header  />
         <Container className="mt--7" fluid>
           <Row>
-            <Col lg="6" xl="3">
-              <Card className="card-stats mb-4 mb-xl-0">
-                <CardBody>
-                  <Row>
-                    <div className="col">
-                      <CardTitle
-                        tag="h5"
-                        className="text-uppercase text-muted mb-0"
-                      >
-                        Contagem média de CC
-                        </CardTitle>
-                      <span className="h2 font-weight-bold mb-0">
-                        {this.state.mdcss}
-                      </span>
-                    </div>
-                    <Col className="col-auto">
-                      <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
-                        <i className="fas fa-chart-bar" />
-                      </div>
-                    </Col>
-                  </Row>
-                  <p className="mt-3 mb-0 text-muted text-sm">
-                    <span className="text-success mr-2">
-                      <i className="fa fa-arrow-up" /> 3.48%
-                      </span>{" "}
-                    <span className="text-nowrap">Since last month</span>
-                  </p>
-                </CardBody>
-              </Card>
-            </Col>
-            <Col lg="6" xl="3">
-              <Card className="card-stats mb-4 mb-xl-0">
-                <CardBody>
-                  <Row>
-                    <div className="col">
-                      <CardTitle
-                        tag="h5"
-                        className="text-uppercase text-muted mb-0"
-                      >
-                        Contagem bacteriana média
-                        </CardTitle>
-                      <span className="h2 font-weight-bold mb-0">
-                        {this.state.mdcss}
-                      </span>
-                    </div>
-                    <Col className="col-auto">
-                      <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
-                        <i className="fas fa-chart-bar" />
-                      </div>
-                    </Col>
-                  </Row>
-                  <p className="mt-3 mb-0 text-muted text-sm">
-                    <span className="text-success mr-2">
-                      <i className="fa fa-arrow-up" /> 3.48%
-                      </span>{" "}
-                    <span className="text-nowrap">Since last month</span>
-                  </p>
-                </CardBody>
-              </Card>
-            </Col>
             <Col className="order-xl-1" xl="8">
               <Card className="bg-secondary shadow">
                 <CardHeader className="bg-white border-0">
@@ -170,10 +101,10 @@ class ConsultaConsumidor extends React.Component {
                 </CardHeader>
                 <CardBody>
                   <div style={{ height: 500, width: '100%' }}>
-                    <DataGrid
-                      rows={this.state.produtores}
-                      columns={this.columns}
-                    />
+                  <DataGrid
+                    rows={state.produtores || []}
+                    columns={columns}
+                  />
                   </div>
                 </CardBody>
               </Card>
@@ -183,7 +114,7 @@ class ConsultaConsumidor extends React.Component {
             color="primary" type="button"
             data-dismiss="modal"
             type="button"
-            onClick={() => {this.get_data()}}
+            onClick={() => {get_data()}}
           >
             OK
             </Button>
@@ -191,7 +122,7 @@ class ConsultaConsumidor extends React.Component {
 
         <Modal
           className="modal-dialog-centered"
-          isOpen={this.state.loadingModal}
+          isOpen={state.loadingModal}
         >
           <div className="modal-header">
             <h5 className="modal-title" id="exampleModalLabel">
@@ -212,7 +143,6 @@ class ConsultaConsumidor extends React.Component {
         </Modal>
       </>
     )
-  }
 };
 
 export default ConsultaConsumidor;
