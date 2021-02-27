@@ -26,6 +26,7 @@ import LancarColeta from "views/examples/LancarColeta.js";
 import LancarQualidade from "views/examples/LancarQualidade.js";
 import AnaliseQualidade from "views/examples/AnaliseQualidade.js";
 import GerarQrCode from "views/examples/gerarQrCode";
+import ConsultaConsumidor from "views/examples/ConsultaConsumidor"
 
 var routes = [
   {
@@ -104,6 +105,13 @@ var routes = [
     icon: "ni ni-circle-08 text-pink",
     component: Register,
     layout: "/auth",
+  },
+  {
+    path: "/lote/:lote",
+    name: "Consulta do consumidor",
+    icon: "ni ni-circle-08 text-pink",
+    component: ConsultaConsumidor,
+    layout: "/admin",
   },
 ];
 export default routes;
