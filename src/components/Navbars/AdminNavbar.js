@@ -76,7 +76,7 @@ const AdminNavbar = (props) => {
                   <span className="avatar avatar-sm rounded-circle">
                     <img
                       alt="..."
-                      src={
+                      src={auth?.currentUser?.photoURL ||  
                         require("../../assets/img/theme/team-4-800x800.jpg")
                           .default
                       }
