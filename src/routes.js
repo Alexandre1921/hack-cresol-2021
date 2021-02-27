@@ -25,6 +25,7 @@ import Icons from "views/examples/Icons.js";
 import LancarColeta from "views/examples/LancarColeta.js";
 import LancarQualidade from "views/examples/LancarQualidade.js";
 import AnaliseQualidade from "views/examples/AnaliseQualidade.js";
+import GerarQrCode from "views/examples/gerarQrCode";
 
 var routes = [
   {
@@ -53,6 +54,13 @@ var routes = [
     name: "Análise de Qualidade",
     icon: "ni ni-active-40 text-primary",
     component: AnaliseQualidade,
+    layout: "/admin",
+  },
+  {
+    path: "/gerar-lote",
+    name: "Gerar lote e QR code",
+    icon: "ni ni-active-40 text-primary",
+    component: GerarQrCode,
     layout: "/admin",
   },
   {
