@@ -218,7 +218,7 @@ class LancarQualidade extends React.Component {
                               className="form-control-label"
                               htmlFor="input-first-name"
                             >
-                              CSS
+                              Contagem células somáticas
                           </label>
                             <NumberFormat
                               className="form-control"
@@ -237,7 +237,7 @@ class LancarQualidade extends React.Component {
                               className="form-control-label"
                               htmlFor="input-last-name"
                             >
-                              CCB
+                              Contagem bateriana
                           </label>
                             <NumberFormat
                               className="form-control"

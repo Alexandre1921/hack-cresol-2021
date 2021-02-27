@@ -19,7 +19,8 @@ import React from "react";
 import ReactDatetime from "react-datetime";
 import NumberFormat from 'react-number-format';
 import ReactLoading from 'react-loading';
-
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import salvar_coleta from '../../controllers/lancar_coleta.js'
 
 // reactstrap components
@@ -55,7 +56,8 @@ class LancarColeta extends React.Component {
       temperatura: "",
       observacao: "",
       loadingModal: false,
-      sucessModal: false
+      sucessModal: false,
+      coleta: false
 
     };
     this.quantidadeChange = this.quantidadeChange.bind(this);
@@ -63,6 +65,7 @@ class LancarColeta extends React.Component {
     this.horarioChange = this.horarioChange.bind(this);
     this.temperaturaChange = this.temperaturaChange.bind(this);
     this.observacaoChange = this.observacaoChange.bind(this);
+    this.coletaChange = this.coletaChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.toggleModalLoading = this.toggleModalLoading.bind(this);
     this.toggleModalSucess = this.toggleModalSucess.bind(this);
@@ -75,6 +78,10 @@ class LancarColeta extends React.Component {
 
   dataChange(event) {
     this.setState({ data: event._d });
+  }
+
+  coletaChange(event) {
+    this.setState({ coleta: event.target.checked });
   }
 
   horarioChange(event) {
@@ -221,6 +228,23 @@ class LancarColeta extends React.Component {
                           </FormGroup>
                         </Col>
                       </Row>
+                      <Row>
+                        <Col lg="12">
+                          <FormGroup>
+                            <FormControlLabel
+                              control={
+                                <Checkbox
+                                  checked={this.state.coleta}
+                                  onChange={this.coletaChange}
+                                  name="coleta"
+                                  color="primary"
+                                />
+                              }
+                              label="Realizada coleta para análise"
+                            />
+                          </FormGroup>
+                        </Col>
+                      </Row>
                     </div>
                     <hr className="my-4" />
                     {/* Description */}
@@ -316,7 +340,7 @@ class LancarColeta extends React.Component {
                 style={{ color: "white", textAlign: "center", fontSize: "6em" }}
               />
               <p>
-                    Não foi possivel salvar a coleta, verifique sua conexão e tente novamente
+                Não foi possivel salvar a coleta, verifique sua conexão e tente novamente
                   </p>
             </div>
 
@@ -350,7 +374,7 @@ class LancarColeta extends React.Component {
             </div>
           </div>
           <div className="modal-footer">
-            
+
           </div>
         </Modal>
       </>
