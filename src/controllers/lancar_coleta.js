@@ -10,10 +10,10 @@ const salvar_coleta = async (state) =>  {
         quantidade: state.quantidade,
         temperatura: state.temperatura,
         produtor: firebase.auth().currentUser.uid,
+        amostra: state.coleta
     }
     console.log(coleta)
     console.log(db)
     db.collection("coleta").add(coleta)
-    
 }
 export default salvar_coleta;

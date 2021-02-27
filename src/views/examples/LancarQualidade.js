@@ -19,9 +19,9 @@ import React from "react";
 import ReactDatetime from "react-datetime";
 import NumberFormat from 'react-number-format';
 import ReactLoading from 'react-loading';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import salvar_coleta from '../../controllers/lancar_coleta.js'
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete'
+import { salvar_qualidade, buscar_produtores } from '../../controllers/lancar_qualidade.js'
 
 // reactstrap components
 import {
@@ -45,55 +45,57 @@ import {
 import Header from "components/Headers/Header.js";
 
 
-class LancarColeta extends React.Component {
+class LancarQualidade extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      quantidade: "",
+      ccs: "",
+      produtor: {},
       data: "",
-      horario: "",
-      temperatura: "",
+      ccb: "",
       observacao: "",
+      useria: "",
       loadingModal: false,
       sucessModal: false,
-      coleta: false
+      produtores : []
 
     };
-    this.quantidadeChange = this.quantidadeChange.bind(this);
+    this.ccsChange = this.ccsChange.bind(this);
+    this.produtorChange = this.produtorChange.bind(this);
     this.dataChange = this.dataChange.bind(this);
-    this.horarioChange = this.horarioChange.bind(this);
-    this.temperaturaChange = this.temperaturaChange.bind(this);
+    this.ccbChange = this.ccbChange.bind(this);
+    this.ureiaChange = this.ureiaChange.bind(this);
     this.observacaoChange = this.observacaoChange.bind(this);
-    this.coletaChange = this.coletaChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.toggleModalLoading = this.toggleModalLoading.bind(this);
     this.toggleModalSucess = this.toggleModalSucess.bind(this);
     this.toggleModalError = this.toggleModalError.bind(this);
   }
 
-  quantidadeChange(event) {
-    this.setState({ quantidade: event.target.value });
+  ccsChange(event) {
+    this.setState({ ccs: event.target.value });
+  }
+
+  produtorChange(event, values) {
+    console.log(values)
+    this.setState({ produtor: values });
   }
 
   dataChange(event) {
     this.setState({ data: event._d });
   }
 
-  coletaChange(event) {
-    this.setState({ coleta: event.target.checked });
-  }
-
-  horarioChange(event) {
-    this.setState({ horario: event.target.value });
-  }
-
-  temperaturaChange(event) {
-    this.setState({ temperatura: event.target.value });
+  ccbChange(event) {
+    this.setState({ ccb: event.target.value });
   }
 
   observacaoChange(event) {
     this.setState({ observacao: event.target.value });
+  }
+
+  ureiaChange(event) {
+    this.setState({ ureia: event.target.value });
   }
 
   toggleModalLoading() {
@@ -114,7 +116,7 @@ class LancarColeta extends React.Component {
 
   handleSubmit(event) {
     this.toggleModalLoading()
-    salvar_coleta(this.state).then(() => {
+    salvar_qualidade(this.state).then(() => {
       this.toggleModalLoading()
       this.toggleModalSucess()
     })
@@ -124,7 +126,13 @@ class LancarColeta extends React.Component {
       });
     event.preventDefault();
   }
-
+  componentDidMount() {
+    buscar_produtores().then(val =>{
+      this.setState({
+        produtores:val
+      })
+    })
+  }
   render() {
     return (
       <>
@@ -137,7 +145,7 @@ class LancarColeta extends React.Component {
                 <CardHeader className="bg-white border-0">
                   <Row className="align-items-center">
                     <Col xs="8">
-                      <h3 className="mb-0">Dados da coleta</h3>
+                      <h3 className="mb-0">Dados da análise de qualidade</h3>
                     </Col>
                   </Row>
                 </CardHeader>
@@ -175,15 +183,30 @@ class LancarColeta extends React.Component {
                               className="form-control-label"
                               htmlFor="input-email"
                             >
-                              Horario
+                              Produtor
+
                           </label>
-                            <Input
-                              className="form-control-alternative"
-                              id="input-horario"
-                              placeholder="12:00 AM"
-                              type="time"
-                              value={this.state.horario}
-                              onChange={this.horarioChange}
+                            <Autocomplete
+                              id="produtor-select"
+                              style={{ width: 300 }}
+                              options={this.state.produtores ? this.state.produtores: []}
+                              // classes={{
+                              //   option: classes.option,
+                              // }}
+                              onChange={this.produtorChange}
+                              autoHighlight
+                              getOptionLabel={(option) => option.nome}
+                            
+                              renderInput={(params) => (
+                                <TextField
+                                  {...params}
+                                  variant="outlined"
+                                  inputProps={{
+                                    ...params.inputProps,
+                                    autoComplete: 'new-password', // disable autocomplete and autofill
+                                  }}
+                                />
+                              )}
                             />
                           </FormGroup>
                         </Col>
@@ -195,16 +218,16 @@ class LancarColeta extends React.Component {
                               className="form-control-label"
                               htmlFor="input-first-name"
                             >
-                              Quantidade
+                              Contagem células somáticas
                           </label>
                             <NumberFormat
                               className="form-control"
-                              id="input-quantidade"
+                              id="input-ccs"
                               thousandSeparator="."
                               decimalSeparator=","
                               decimalScale="2"
-                              value={this.state.quantidade}
-                              onChange={this.quantidadeChange}
+                              value={this.state.ccs}
+                              onChange={this.ccsChange}
                             />
                           </FormGroup>
                         </Col>
@@ -214,33 +237,33 @@ class LancarColeta extends React.Component {
                               className="form-control-label"
                               htmlFor="input-last-name"
                             >
-                              Temperatura
+                              Contagem bateriana
                           </label>
                             <NumberFormat
                               className="form-control"
-                              id="input-temperatura"
+                              id="input-ccb"
                               decimalSeparator=","
-                              format="##,## °C "
                               decimalScale="2"
-                              // value={this.state.temperatura}
-                              onChange={this.temperaturaChange}
+                              // value={this.state.ccb}
+                              onChange={this.ccbChange}
                             />
                           </FormGroup>
                         </Col>
-                      </Row>
-                      <Row>
-                        <Col lg="12">
+                        <Col lg="6">
                           <FormGroup>
-                            <FormControlLabel
-                              control={
-                                <Checkbox
-                                  checked={this.state.coleta}
-                                  onChange={this.coletaChange}
-                                  name="coleta"
-                                  color="primary"
-                                />
-                              }
-                              label="Realizada coleta para análise"
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-last-name"
+                            >
+                              Uréia
+                          </label>
+                            <NumberFormat
+                              className="form-control"
+                              id="input-ureia"
+                              decimalSeparator=","
+                              decimalScale="2"
+                              value={this.state.ureia}
+                              onChange={this.ureiaChange}
                             />
                           </FormGroup>
                         </Col>
@@ -253,7 +276,7 @@ class LancarColeta extends React.Component {
                       <FormGroup>
                         <Input
                           className="form-control-alternative"
-                          placeholder="Algo que deseja deixar obervado sobre essa coleta?"
+                          placeholder="Algo que deseja deixar obervado sobre essa análise de qualidade?"
                           rows="4"
                           type="textarea"
                           value={this.state.observacao}
@@ -284,7 +307,7 @@ class LancarColeta extends React.Component {
         >
           <div className="modal-header">
             <h5 className="modal-title" id="exampleModalLabel">
-              Coleta Salva com sucesso
+              Análise de qualidade Salva com sucesso
             </h5>
             <button
               aria-label="Close"
@@ -306,7 +329,7 @@ class LancarColeta extends React.Component {
           </div>
           <div className="modal-footer">
             <Button
-              color="primary" type="button"
+              color="primary"
               data-dismiss="modal"
               type="button"
               onClick={() => this.toggleModalSucess()}
@@ -322,7 +345,7 @@ class LancarColeta extends React.Component {
         >
           <div className="modal-header">
             <h5 className="modal-title" id="exampleModalLabel">
-              Falha ao salvar coleta
+              Falha ao salvar análise de qualidade
             </h5>
             <button
               aria-label="Close"
@@ -340,14 +363,14 @@ class LancarColeta extends React.Component {
                 style={{ color: "white", textAlign: "center", fontSize: "6em" }}
               />
               <p>
-                Não foi possivel salvar a coleta, verifique sua conexão e tente novamente
+                Não foi possivel salvar a análise de qualidade, verifique sua conexão e tente novamente
                   </p>
             </div>
 
           </div>
           <div className="modal-footer">
             <Button
-              color="primary" type="button"
+              color="primary"
               data-dismiss="modal"
               type="button"
               onClick={() => this.toggleModalSucess()}
@@ -362,7 +385,7 @@ class LancarColeta extends React.Component {
         >
           <div className="modal-header">
             <h5 className="modal-title" id="exampleModalLabel">
-              Salvando coleta
+              Salvando análise de qualidade
             </h5>
 
           </div>
@@ -382,4 +405,4 @@ class LancarColeta extends React.Component {
   }
 };
 
-export default LancarColeta;
+export default LancarQualidade;
