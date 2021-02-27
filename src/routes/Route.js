@@ -11,13 +11,13 @@ const Route = ({
   component: Component,
   ...rest
 }) => {
-  const { token } = useAuth();
+  const { role } = useAuth();
 
   return (
     <ReactDOMRoute
       {...rest}
       render={(props) => {
-        return isPrivate === !!token ? (
+        return isPrivate === !!role ? (
           <Component {...props} />
         ) : (
           <Redirect

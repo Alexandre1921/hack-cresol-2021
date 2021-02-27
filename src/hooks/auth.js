@@ -1,15 +1,16 @@
 import React, { createContext, useCallback, useContext, useState } from 'react';
 
-import { auth } from "../utils/firebase";
+import { db, auth } from "../utils/firebase";
 
 const AuthContext = createContext({});
 
 const AuthProvider = ({ children }) => {
   const [data, setData] = useState(() => {
     const token = localStorage.getItem('@InoveMilk:token');
+    const role = localStorage.getItem('@InoveMilk:role');
 
-    if (token) {
-      return { token };
+    if (token && role) {
+      return { token, role };
     }
 
     return {};
@@ -19,14 +20,24 @@ const AuthProvider = ({ children }) => {
     const { user } = UserCredential;
 
     const token = user.getIdToken();
+    const uid = user.uid;
 
-    localStorage.setItem('@InoveMilk:token', token);
+    db.collection("usuario").where("idFirebase","==",uid).get()
+    .then(query=>!query.empty?query.docs[0]:Promise.reject("Usuário não encontrado"))
+    .then((doc)=>{
+      if (doc.exists) {
+        const { tpUsuario } = doc.data();
+        localStorage.setItem('@InoveMilk:token', token);
+        localStorage.setItem('@InoveMilk:role', tpUsuario);
 
-    setData({ token });
+        setData({ token, role: tpUsuario });
+      }
+    });
   }, []);
 
   const signOut = useCallback(() => {
     localStorage.removeItem('@InoveMilk:token');
+    localStorage.removeItem('@InoveMilk:role');
 
     auth.signOut();
 
@@ -35,7 +46,7 @@ const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ token: data.token , signIn, signOut }}
+      value={{ token: data.token, role: data.role, signIn, signOut }}
     >
       {children}
     </AuthContext.Provider>
