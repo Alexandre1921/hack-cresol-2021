@@ -35,11 +35,11 @@ import {
   Pagination,
   PaginationItem,
   PaginationLink,
-  Progress,
+  Modal,
   Table,
   Container,
   Row,
-  UncontrolledTooltip,
+  Button,
 } from "reactstrap";
 // core components
 import Header from "components/Headers/HeaderProdutor.js";
@@ -50,23 +50,27 @@ const Tables = () => {
   const { uid } = useAuth();
   const [listQualidade, setListQualidade] = useState([]);
 
+  const [exampleModal, setExampleModal] = useState({isOpen:false});
+  const toggleModal = () => {
+    setExampleModal({...exampleModal, isOpen:!exampleModal.isOpen});
+  };
+
   useEffect(()=>{
     db.collection("produtor").where("idProdutor","==",uid).get()
     .then(query=>!query.empty?query.docs[0]:Promise.reject("Produtor não encontrado"))
     .then(doc=>{
       if (doc.exists) {
-        db.collection("qualidade").where("produtor","==", doc.id).get()
+        db.collection("qualidade").where("produtor","==", doc.id).orderBy("data", "asc").get()
         .then(query=>{
           setListQualidade(query.docs.filter(value=>value.exists).map(value=>({docId: value.id,...value.data()})));
         })
       }
     });
   }, [uid]);
-  console.log(listQualidade);
 
   return (
     <>
-      <Header />
+      <Header cardsData={listQualidade.slice(-2)} />
       {/* Page content */}
       <Container className="mt--7" fluid>
         {/* Table */}
@@ -74,7 +78,7 @@ const Tables = () => {
           <div className="col">
             <Card className="shadow">
               <CardHeader className="border-0">
-                <h3 className="mb-0">Entregas recolhidas</h3>
+                <h3 className="mb-0">Resultados laboratoriais</h3>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
@@ -87,6 +91,26 @@ const Tables = () => {
                 </thead>
                 <tbody>
                   {listQualidade.map((value) => {
+                    const HandleOnClickDropdown = (e) => {
+                      console.log(value);
+                      e.preventDefault();
+                      setExampleModal({
+                        isOpen: true,
+                        title: `Teste realizado em ${format(value.data.toDate(),"cccc - P", {locale: ptBR})}`,
+                        content:(
+                          <>
+                            <p>Empresa que realizou o teste: <b>{value.nome_empresa}</b></p>
+                            <p>Disponibilizou os seguintes resultados:</p>
+                            <p>ccb: <b>{value.ccb}</b></p>
+                            <p>ccs: <b>{value.ccs}</b></p>
+                            <p>ureia: <b>{value.ureia}</b></p>
+                            <p>Com as seguintes observacoes:</p>
+                            <p><b>{value.observacao || "Nenhuma observação foi feita"}</b></p>
+                          </>
+                        )
+                      })
+                    }
+                    
                     return (
                       <tr key={value.docId}>
                         <th>{format(value.data.toDate(),"cccc - P", {locale: ptBR})}</th>
@@ -101,7 +125,7 @@ const Tables = () => {
                         </td>
                         <td>
                           <Badge color="" className="badge-dot mr-4">
-                            {value.observacao}
+                            {value.observacao || "Nenhuma observação foi feita"}
                           </Badge>
                         </td>
                         <td className="text-right">
@@ -119,15 +143,9 @@ const Tables = () => {
                             <DropdownMenu className="dropdown-menu-arrow" right>
                               <DropdownItem
                                 href="#pablo"
-                                onClick={(e) => e.preventDefault()}
+                                onClick={HandleOnClickDropdown}
                               >
                                 Ver mais detalhes do resultado
-                              </DropdownItem>
-                              <DropdownItem
-                                href="#pablo"
-                                onClick={(e) => e.preventDefault()}
-                              >
-                                Deletar entrega
                               </DropdownItem>
                             </DropdownMenu>
                           </UncontrolledDropdown>
@@ -193,6 +211,40 @@ const Tables = () => {
           </div>
         </Row>
       </Container>
+      <Modal
+          className="modal-dialog-centered"
+          isOpen={exampleModal.isOpen}
+          toggle={() => toggleModal()}
+        >
+          <div className="modal-header">
+            <h5 className="modal-title" id="exampleModalLabel">
+              {exampleModal.title}
+            </h5>
+            <button
+              aria-label="Close"
+              className="close"
+              data-dismiss="modal"
+              type="button"
+              onClick={() => toggleModal()}
+            >
+              <span aria-hidden={true}>×</span>
+            </button>
+          </div>
+          <div className="modal-body">{exampleModal.content}</div>
+          <div className="modal-footer">
+            <Button
+              color="secondary"
+              data-dismiss="modal"
+              type="button"
+              onClick={() => toggleModal()}
+            >
+              Close
+            </Button>
+            <Button color="primary" type="button">
+              Save changes
+            </Button>
+          </div>
+        </Modal>
     </>
   );
 };
