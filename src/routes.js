@@ -23,6 +23,7 @@ import ConsultarDados from "views/examples/ConsultarDados.js";
 import LancarColeta from "views/examples/LancarColeta.js";
 import LancarQualidade from "views/examples/LancarQualidade.js";
 import AnaliseQualidade from "views/examples/AnaliseQualidade.js";
+import ListagemLotes from "views/examples/ListagemLotes.js";
 
 var routes = [{
         path: "/index",
@@ -78,6 +79,15 @@ var routes = [{
         name: "Lançar Qualidade",
         icon: "ni ni-active-40 text-primary",
         component: LancarQualidade,
+        layout: "/admin",
+        role: "produtor"
+    },
+
+    {
+        path: "/listarLotes",
+        name: "Listar Lotes",
+        icon: "ni ni-active-40 text-primary",
+        component: ListagemLotes,
         layout: "/admin",
         role: "produtor"
     },
