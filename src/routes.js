@@ -17,11 +17,8 @@
 */
 import Index from "views/Index.js";
 import Profile from "views/examples/Profile.js";
-import Maps from "views/examples/Maps.js";
 import Register from "views/examples/Register.js";
 import Login from "views/examples/Login.js";
-import Tables from "views/examples/Tables.js";
-import Icons from "views/examples/Icons.js";
 import LancarColeta from "views/examples/LancarColeta.js";
 import LancarQualidade from "views/examples/LancarQualidade.js";
 import AnaliseQualidade from "views/examples/AnaliseQualidade.js";
@@ -36,11 +33,29 @@ var routes = [
     layout: "/admin",
   },
   {
+    path: "/user-profile",
+    name: "User Profile",
+    icon: "ni ni-single-02 text-yellow",
+    component: Profile,
+    layout: "/admin",
+  },
+
+  {
     path: "/lancar-coleta",
     name: "Lançar Coleta",
     icon: "ni ni-active-40 text-primary",
     component: LancarColeta,
     layout: "/admin",
+    role: "motorista"
+  },
+
+  {
+    path: "/lancar-qualidade",
+    name: "Lançar Qualidade",
+    icon: "ni ni-active-40 text-primary",
+    component: LancarQualidade,
+    layout: "/admin",
+    role: "analista"
   },
   {
     path: "/lancar-qualidade",
@@ -48,6 +63,16 @@ var routes = [
     icon: "ni ni-active-40 text-primary",
     component: LancarQualidade,
     layout: "/admin",
+    role: "produtor"
+  },
+
+  {
+    path: "/analise-qualidade",
+    name: "Análise de Qualidade",
+    icon: "ni ni-active-40 text-primary",
+    component: AnaliseQualidade,
+    layout: "/admin",
+    role: "analista"
   },
   {
     path: "/analise-qualidade",
@@ -55,42 +80,9 @@ var routes = [
     icon: "ni ni-active-40 text-primary",
     component: AnaliseQualidade,
     layout: "/admin",
+    role: "produtor"
   },
-  {
-    path: "/gerar-lote",
-    name: "Gerar lote e QR code",
-    icon: "ni ni-active-40 text-primary",
-    component: GerarQrCode,
-    layout: "/admin",
-  },
-  {
-    path: "/icons",
-    name: "Icons",
-    icon: "ni ni-planet text-blue",
-    component: Icons,
-    layout: "/admin",
-  },
-  {
-    path: "/maps",
-    name: "Maps",
-    icon: "ni ni-pin-3 text-orange",
-    component: Maps,
-    layout: "/admin",
-  },
-  {
-    path: "/user-profile",
-    name: "User Profile",
-    icon: "ni ni-single-02 text-yellow",
-    component: Profile,
-    layout: "/admin",
-  },
-  {
-    path: "/tables",
-    name: "Tables",
-    icon: "ni ni-bullet-list-67 text-red",
-    component: Tables,
-    layout: "/admin",
-  },
+
   {
     path: "/login",
     name: "Login",
