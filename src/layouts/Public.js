@@ -67,7 +67,7 @@ const Public = (props) => {
                 <Col lg="5" md="6">
                   <h1 className="text-white">Bem vindo!</h1>
                   <p className="text-lead text-light">
-                    InoveMilk está aqui para te ajudar no seu negócio com inovação e qualidade
+                    InoveMilk mostra para você de onde veio a matéria prima dos produtos que está consumindo
                   </p>
                 </Col>
               </Row>

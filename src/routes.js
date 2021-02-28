@@ -111,7 +111,7 @@ var routes = [
     name: "Consulta do consumidor",
     icon: "ni ni-circle-08 text-pink",
     component: ConsultaConsumidor,
-    layout: "/admin",
+    layout: "/public",
   },
 ];
 export default routes;

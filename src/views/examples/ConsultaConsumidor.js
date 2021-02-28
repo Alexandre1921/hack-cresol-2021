@@ -110,14 +110,7 @@ const ConsultaConsumidor = ({match}) => {
               </Card>
             </Col>
           </Row>
-          <Button
-            color="primary" type="button"
-            data-dismiss="modal"
-            type="button"
-            onClick={() => {get_data()}}
-          >
-            OK
-            </Button>
+          
         </Container>
 
         <Modal
