@@ -116,6 +116,15 @@ var routes = [{
 },
 
 {
+    path: "/criar",
+    name: "Criar Lotes",
+    icon: "ni ni-active-40 text-primary",
+    component: GerarQrCode,
+    layout: "/admin",
+    role: "produtor"
+},
+
+{
     path: "/analise-qualidade",
     name: "Análise de Qualidade",
     icon: "ni ni-active-40 text-primary",

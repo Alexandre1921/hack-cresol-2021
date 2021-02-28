@@ -71,6 +71,7 @@ const ConsultaConsumidor = ({match}) => {
             })
           }))
         }).then(()=>{
+          console.log(prod)
           setState({
             cargas: val,
             coletas: colet,

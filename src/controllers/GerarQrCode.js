@@ -53,7 +53,7 @@ export const gerar_lote = async (state) => {
         state.selected.forEach(carga => {
             db.collection("carga").doc(carga).update({lote: ref.id});
         })
-        return "http://localhost:3000/lote/"+ref.id
+        return "https://hack-cresol-2021.web.app/public/lote"+ref.id
     })
     
 }

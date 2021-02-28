@@ -92,7 +92,7 @@ const ListagemLotes = () => {
                         title: "QRCode",
                         content:(
                           <>
-                          <QRCode value={"http://localhost:3000/lote/"+value.docId} />
+                          <QRCode value={"https://hack-cresol-2021.web.app/public/lote/"+value.docId} />
                           </>
                         )
                       })
