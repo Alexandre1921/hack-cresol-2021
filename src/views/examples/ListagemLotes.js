@@ -42,30 +42,19 @@ import {
   Button,
 } from "reactstrap";
 // core components
-import Header from "components/Headers/HeaderProdutor.js";
+import Header from "components/Headers/Header.js";
 import { db } from "../../utils/firebase";
 import { useAuth } from "../../hooks/auth";
-
-const showQRCode = (idRow) => {
-  setExampleModal({
-    isOpen: true,
-    title: "QRCode",
-    content:(
-      <>
-      
-      </>
-    )
-  })
-};
+var QRCode = require('qrcode.react');
 
 const ListagemLotes = () => {
   const { uid } = useAuth();
   const [listQualidade, setListQualidade] = useState([]);
 
-  // const [exampleModal, setExampleModal] = useState({isOpen:false});
-  // const toggleModal = () => {
-  //   setExampleModal({...exampleModal, isOpen:!exampleModal.isOpen});
-  // };
+  const [exampleModal, setExampleModal] = useState({isOpen:false});
+  const toggleModal = () => {
+    setExampleModal({...exampleModal, isOpen:!exampleModal.isOpen});
+  };
 
   useEffect(()=>{
     db.collection("lote").get()
@@ -97,6 +86,17 @@ const ListagemLotes = () => {
                 </thead>
                 <tbody>
                   {listQualidade.map((value) => {
+                    const showQRCode = (e) => {
+                      setExampleModal({
+                        isOpen: true,
+                        title: "QRCode",
+                        content:(
+                          <>
+                          <QRCode value={"http://localhost:3000/lote/"+value.docId} />
+                          </>
+                        )
+                      })
+                    };
                     // const HandleOnClickDropdown = (e) => {
                     //   console.log(value);
                     //   e.preventDefault();
@@ -128,7 +128,7 @@ const ListagemLotes = () => {
                           {
                           <Button
                         className="float-right btn"
-                        onClick={(e) => { this.showQRCode(e) }}
+                        onClick={(e) => { showQRCode() }}
                       >
                         Ver QRCode
                   </Button>
@@ -217,7 +217,7 @@ const ListagemLotes = () => {
           </div>
         </Row>
       </Container>
-      {/* <Modal
+      {<Modal
           className="modal-dialog-centered"
           isOpen={exampleModal.isOpen}
           toggle={() => toggleModal()}
@@ -247,7 +247,7 @@ const ListagemLotes = () => {
               Fechar
             </Button>
           </div>
-        </Modal> */}
+        </Modal>}
     </>
   );
 };
