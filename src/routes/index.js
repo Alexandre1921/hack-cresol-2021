@@ -11,7 +11,7 @@ const Routes = () => {
   return (
     <Switch>
       <Route path="/admin" component={(props) =><AdminLayout {...props} />} isPrivate/>
-      <Route path="/auth" component={(props) => <AuthLayout {...props} />} />
+      <Route path="/" component={(props) => <AuthLayout {...props} />} />
       <Route path="/public" component={(props) => <PublicLayout {...props} />} />
       <Route render={() => <Redirect to={{pathname: "/"}} />} />
     </Switch>
