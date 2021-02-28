@@ -59,14 +59,6 @@ const AdminNavbar = (props) => {
           </Link>
           <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
             <FormGroup className="mb-0">
-              <InputGroup className="input-group-alternative">
-                <InputGroupAddon addonType="prepend">
-                  <InputGroupText>
-                    <i className="fas fa-search" />
-                  </InputGroupText>
-                </InputGroupAddon>
-                <Input placeholder="Search" type="text" />
-              </InputGroup>
             </FormGroup>
           </Form>
           <Nav className="align-items-center d-none d-md-flex" navbar>
@@ -76,7 +68,7 @@ const AdminNavbar = (props) => {
                   <span className="avatar avatar-sm rounded-circle">
                     <img
                       alt="..."
-                      src={
+                      src={auth?.currentUser?.photoURL ||  
                         require("../../assets/img/theme/team-4-800x800.jpg")
                           .default
                       }
