@@ -22,7 +22,7 @@ const Route = ({
         ) : (
           <Redirect
             to={{
-              pathname: isPrivate ? "/auth" : "/admin",
+              pathname: isPrivate ? "/" : role ? "/admin" : "/public",
               state: { from: props.location },
             }}
           />
