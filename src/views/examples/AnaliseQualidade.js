@@ -15,7 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 // node.js library that concatenates classes (strings)
 import classnames from "classnames";
 // javascipt plugin for creating charts
@@ -43,12 +43,16 @@ import {
 } from "variables/charts.js";
 
 import Header from "components/Headers/Header.js";
-import {obter_dados} from "../../controllers/analiseQualidade.js"
+import {obter_dados} from "../../controllers/analiseQualidade.js";
+import { useAuth } from "hooks/auth";
 
 const AnaliseQualidade = (props) => {
+  const { uid } = useAuth();
   const [activeNav, setActiveNav] = useState(1);
   const [chatData, salvar] = useState('');
   const [chartExample1Data, setChartExample1Data] = useState("data1");
+
+  
 
   if (window.Chart) {
     
@@ -56,15 +60,19 @@ const AnaliseQualidade = (props) => {
     
   }
 
-  const toggleNavs = (e, index) => {
+  const toggleNavs = useCallback((e, index) => {
     e.preventDefault();
-    obter_dados().then((val)=>{
+    obter_dados(uid).then((val)=>{
       salvar(val)
     })
-    console.log(chatData)
     setActiveNav(index);
     setChartExample1Data("data" + index);
-  };
+  },[uid]);
+
+  useEffect(()=>{
+    toggleNavs({preventDefault:()=>{}},1);
+  },[toggleNavs]);
+  
   return (
     
     <>
